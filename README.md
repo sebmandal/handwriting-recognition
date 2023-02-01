@@ -10,6 +10,7 @@ This project uses a neural network to recognize digits from the MNIST dataset. T
 
 - Clone the repository
 - Navigate to the project directory in your terminal
+- Rename the paths to the training/test sets in App.java
 - Compile the Java files:
 
 ```javac *.java```
