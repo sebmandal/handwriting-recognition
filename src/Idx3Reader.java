@@ -40,7 +40,6 @@ public class Idx3Reader {
 
     public int getLabel(int index) throws IOException {
         long position = 8 + index;
-
         labels.seek(position);
         return labels.readUnsignedByte();
     }

@@ -1,3 +1,9 @@
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.IOException;
+
 public class Network {
     private int inputSize;
     private int hiddenSize;
@@ -38,7 +44,6 @@ public class Network {
 
         int prediction = 0;
         double maxValue = Double.NEGATIVE_INFINITY;
-        System.out.println(outputLayer);
 
         for (int i = 0; i < outputSize; i++) {
             if (outputLayer[i] > maxValue) {
@@ -54,8 +59,6 @@ public class Network {
         double[] hiddenLayer = new double[hiddenSize];
         for (int i = 0; i < hiddenSize; i++) {
             for (int j = 0; j < inputSize - 1; j++) {
-                // System.out.println(image.length + " " + image[j / 28].length + " and " + j /
-                // 28 + " " + i % 28);
                 hiddenLayer[i] += image[j / 28][j % 28][0] * inputWeights[j][i];
             }
             hiddenLayer[i] = sigmoid(hiddenLayer[i] + hiddenBiases[i]);
@@ -124,5 +127,35 @@ public class Network {
         for (int i = 0; i < hiddenSize; i++) {
             hiddenBiases[i] += learningRate * hiddenErrors[i];
         }
+    }
+
+    public void saveWeightsAndBiases(String fileName) {
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(fileName))) {
+            out.writeObject(inputWeights);
+            out.writeObject(hiddenWeights);
+            out.writeObject(hiddenBiases);
+            out.writeObject(outputBiases);
+        } catch (IOException e) {
+            System.err.println("Error saving weights and biases to file: " + e.getMessage());
+        }
+    }
+
+    public void loadWeightsAndBiases(String fileName) {
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(fileName))) {
+            inputWeights = (double[][]) in.readObject();
+            hiddenWeights = (double[][]) in.readObject();
+            hiddenBiases = (double[]) in.readObject();
+            outputBiases = (double[]) in.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            System.err.println("Error loading weights and biases from file: " + e.getMessage());
+        }
+    }
+
+    public void readWeightsAndBiases() {
+        System.out.println(inputWeights);
+        System.out.println(hiddenWeights);
+        System.out.println(hiddenBiases);
+        System.out.println(outputBiases);
+        return;
     }
 }
