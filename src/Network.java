@@ -125,5 +125,4 @@ public class Network {
             hiddenBiases[i] += learningRate * hiddenErrors[i];
         }
     }
-
 }
